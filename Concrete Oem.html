@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Receipt</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        select,
+        input[type="radio"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Receipt Form</h1>
+    
+    <form id="receiptForm">
+        <label for="employeeName">Employee Name:</label>
+        <input type="text" id="employeeName" required><br><br>
+
+        <label for="productType">Product Type:</label>
+        <select id="productType">
+            <option value="Uniform">Uniform</option>
+            <option value="Laptop">Laptop</option>
+            <!-- Add more product options as needed -->
+        </select><br><br>
+
+        <label for="received">Received:</label>
+        <input type="radio" id="receivedYes" name="received" value="Yes" required>
+        <label for="receivedYes">Yes</label>
+        <input type="radio" id="receivedNo" name="received" value="No">
+        <label for="receivedNo">No</label><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("receiptForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const employeeName = document.getElementById("employeeName").value;
+            const productType = document.getElementById("productType").value;
+            const received = document.querySelector('input[name="received"]:checked').value;
+
+            const receiptDetails = {
+                employeeName: employeeName,
+                productType: productType,
+                received: received
+            };
+
+            fetch("https://yourserver.com/collect-receipt", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(receiptDetails)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Server response:", data);
+                document.getElementById("receiptForm").reset();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+
+            alert("Thank you for submitting the receipt!");
+        });
+    </script>
+</body>
+</html>
